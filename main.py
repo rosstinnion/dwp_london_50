@@ -16,8 +16,8 @@ def to_radians(degree):
     return one_degree * float(degree)
 
 
-# calculate distance between two point
-# wiki page here https://en.wikipedia.org/wiki/Haversine_formula although I didn't use this formula
+# calculate distance between two point on earth
+# wiki page here https://en.wikipedia.org/wiki/Haversine_formula
 def distance_between_two_points(long1, lat1, long2, lat2):
     latitude1 = to_radians(float(lat1))
     longitude1 = to_radians(float(long1))
@@ -47,6 +47,7 @@ def get_user_by_city(city):
 
 
 # call endpoint to get user by id
+# This is not used, I have left it here to demonstrate we can GET user by id to query their city
 def get_user_by_id(user_id):
     api_single_user_url = f"{api_user_details_url}{['user_id']}"
     user_id_response = requests.get(api_single_user_url)
@@ -61,6 +62,7 @@ def get_all_users():
 
 
 # get the reported city for a given IP address
+# this is not used but ip address is available, so we could try and find the user city by IP address if required
 def get_city_by_ip(ip_address):
     ip_city = "unknown"
 
@@ -84,6 +86,7 @@ def user_object_friendly_output_string(user_parameter):
            f"longitude:{user_parameter['longitude']} latitude:{user_parameter['latitude']} Distance from London:{distance:.2f} miles"
 
 
+# Not used here but demonstrates regex to validate the IP address
 def validate_ip(ip_address):
     regex = '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9]).){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])$'
 
@@ -109,23 +112,6 @@ all_users = get_all_users()
 
 # loop through all users and calculate distance from London using longitude and latitude
 for user in all_users:
-
-    # call endpoint to get user by id
-    user_details = ""
-    # This call can be implemented if we want to check by user id if their city is London
-    # user_details = get_user_by_id(user["id"])
-
-    # get city reported for user
-    user_details_city = "unknown"
-    if "city" in user_details:
-        user_details_city = str(user_details['city'])
-
-    ip = str(user['ip_address'])
-
-    # This call can be implemented if we want to check if the IP address reports back as London, not reliable but possible
-    # get the city associated with IP
-    user_city_by_ip = ""
-    # user_city_by_ip = get_city_by_ip(ip)
 
     # get geographic distance of user from London using longitude and latitude
     distance_from_london = distance_between_two_points(london_longitude, london_latitude, user["longitude"], user["latitude"])
